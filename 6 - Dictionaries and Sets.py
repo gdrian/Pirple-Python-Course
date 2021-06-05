@@ -32,77 +32,39 @@ Question = {
 	"ReleaseDate": "When was the album released?\n",
 	"DurMin": "In minutes, how long is the song precisely?\n",
 	"DurSec": "In seconds, how long is the song precisely?\n"}
+breakflag = False
 
-def gamecheck():
-	Score = 0
-	for key in Dictionary:
-		val = Dictionary[key]
-		print(Question[key])
-		answer = input()
-		if isinstance(val, float):
-			if float(answer) == val:
-				print("You are correct!")
+def game():
+	def tryAgain():
+		answer = input("Would you like to try again?\nYes / No\n")
+		while answer.lower() != "yes" and answer.lower() != "no":
+			answer = input("Please choose a correct answer. \nYes / No\n")
+		if str(answer).lower() == "yes":
+			print("New game starting . . .")
+			time.sleep(0.5)
+			return True
+		elif str(answer).lower() == "no":
+			print("Thank you for playing. Game will now quit.")
+			time.sleep(0.5)
+			global breakflag
+			return False
+	def qna():
+		Score = 0
+		for key in Dictionary:
+			val = Dictionary[key]
+			answer = input(Question[key])
+			if answer.lower() == str(val).lower():
+				print("You are correct!\n")
 				Score += 1
-				continue
 			else:
-				print("Close. The correct answer was {}.\nYour final score was {}.\nWould you like to try again?\n  Yes  /  No  ".format(val, Score))
-				answer = input()
-				while answer.lower() != "no" and answer.lower() != "yes":
-					print("Please insert a correct value: Yes / No")
-					answer = input()
-				if answer.lower() == "no":
-					print("Thank you for playing.\nGame will now quit.")
-					time.sleep(1)
-					return False
-				elif answer.lower() == "yes":
-					print("Game loading . . .")
-					time.sleep(0.8)
-					return True
-		elif isinstance(val, int):
-			if int(answer) == val:
-				print("You are correct!")
-				Score += 1
-				continue
-			else:
-				print(
-					"Close. The correct answer was {}.\nYour final score was {}.\nWould you like to try again?\n  Yes  /  No  ".format(
-						val, Score))
-				answer = input()
-				while answer.lower() != "no" and answer.lower() != "yes":
-					print("Please insert a correct value: Yes / No")
-					answer = input()
-				if answer.lower() == "no":
-					print("Thank you for playing.\nGame will now quit.")
-					time.sleep(1)
-					return False
-				elif answer.lower() == "yes":
-					print("Game loading . . .")
-					time.sleep(0.8)
-					return True
-		else:
-			if answer.lower() == val.lower():
-				print("You are correct!")
-				Score += 1
-				continue
-			else:
-				print("Close. The correct answer was {}.\nYour final score was {}.\nWould you like to try again?\n  Yes  /  No  ".format(val, Score))
-				answer = input()
-				while answer.lower() != "no" and answer.lower() != "yes":
-					print("Please insert a correct value: Yes / No")
-					answer = input()
-				if answer.lower() == "no":
-					print("Thank you for playing.\nGame will now quit.")
-					time.sleep(1)
-					return False
-				elif answer.lower() == "yes":
-					print("Game loading . . .")
-					time.sleep(0.8)
-					return True
-
-
+				print("Close. The correct answer was {}.\nYour final score was {}.\n".format(val, Score))
+				if not tryAgain():
+					global breakflag
+					breakflag = True
+					break
+	qna()
 
 while True:
-	if gamecheck():
-		continue
-	else:
+	if breakflag:
 		break
+	game()
